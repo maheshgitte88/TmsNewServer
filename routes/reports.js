@@ -142,6 +142,8 @@ router.get('/reports', async (req, res) => {
 });
 
 
+
+
 router.get('/tickets-category', async (req, res) => {
     try {
         const tickets = await ReportTickets.findAll({

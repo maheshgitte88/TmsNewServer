@@ -655,6 +655,33 @@ router.post("/update-ticket", async (req, res) => {
   }
 });
 
+
+router.post("/update-category-subcategory", async (req, res) => {
+  try {
+    const { TicketID, querycategory, querySubcategory } = req.body;
+
+    // Find the ticket by TicketID
+    const ticket = await Ticket.findOne({
+      where: { TicketID },
+    });
+
+    if (ticket) {
+      // Update the ticket with the received data
+      const resposnce = await ticket.update({ Querycategory: querycategory, QuerySubcategory: querySubcategory });
+
+      res.status(200).json({ success: true, ticket: resposnce });
+    } else {
+      // Send error response if the ticket was not found
+      res.status(404).json({ success: false, message: "Ticket not found" });
+    }
+  } catch (error) {
+    console.error("Error updating ticket:", error);
+    // Send error response if an error occurs
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+});
+
+
 async function updateTicket(data) {
   try {
     console.log(data, 262);

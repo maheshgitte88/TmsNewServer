@@ -14,7 +14,7 @@ const Ticket = require('./routes/ticket');
 const Hierarchy = require('./routes/hierarchy');
 const Training = require('./routes/training');
 const ProActive = require('./routes/proActive')
-const Reports =require('./routes/reports')
+const Reports = require('./routes/reports')
 const upload = multer({ dest: "uploads/" });
 
 const port = process.env.PORT || 2000;
@@ -84,7 +84,7 @@ io.on('connection', (socket) => {
       const updateTicket = await Ticket.updateTicket(data);
       const roomid = data.AssignedToSubDepartmentID;
       console.log(roomid, 82);
-      console.log(updateTicket.TicketID, 83 );
+      console.log(updateTicket.TicketID, 83);
 
       io.to(roomid).emit("updatedticketData", updateTicket);
       io.to(updateTicket.TicketID).emit("userUpdatedticketReciverd", updateTicket);
@@ -182,10 +182,10 @@ const getWorkingMinutes = (start, end) => {
   let current = new Date(start);
 
   while (current <= end) {
-      if (!isWeekend(current) && isWithinWorkingHours(current)) {
-          totalMinutes++;
-      }
-      current.setUTCMinutes(current.getUTCMinutes() + 1); // Use setUTCMinutes to adjust minutes in UTC
+    if (!isWeekend(current) && isWithinWorkingHours(current)) {
+      totalMinutes++;
+    }
+    current.setUTCMinutes(current.getUTCMinutes() + 1); // Use setUTCMinutes to adjust minutes in UTC
   }
 
   return totalMinutes;
@@ -195,10 +195,10 @@ const getOrignalMinutes = (start, end) => {
   let current = new Date(start);
 
   while (current <= end) {
-      // if (!isWeekend(current) && isWithinWorkingHours(current)) {
-      totalMinutesOrg++;
-      // }
-      current.setUTCMinutes(current.getUTCMinutes() + 1); // Use setUTCMinutes to adjust minutes in UTC
+    // if (!isWeekend(current) && isWithinWorkingHours(current)) {
+    totalMinutesOrg++;
+    // }
+    current.setUTCMinutes(current.getUTCMinutes() + 1); // Use setUTCMinutes to adjust minutes in UTC
   }
 
   return totalMinutesOrg;
@@ -212,41 +212,41 @@ const calculateTAT = (createdAt, resolutionTimestamp, ticketResTimeInMinutes, Tr
   let OrigtranfActualTAT = 0;
   let actualTATOrig = 0;
 
-  if(TransferredToDepartmentID) {
-      const transferred = new Date(transferred_Timestamp);
-      tranfActualTAT = getWorkingMinutes(start, resolution);
-      actualTAT = getWorkingMinutes(resolution, transferred);
-      OrigtranfActualTAT = getOrignalMinutes(start, resolution)
-      actualTATOrig = getOrignalMinutes(resolution, transferred)
+  if (TransferredToDepartmentID) {
+    const transferred = new Date(transferred_Timestamp);
+    tranfActualTAT = getWorkingMinutes(start, resolution);
+    actualTAT = getWorkingMinutes(resolution, transferred);
+    OrigtranfActualTAT = getOrignalMinutes(start, resolution)
+    actualTATOrig = getOrignalMinutes(resolution, transferred)
 
   } else {
-      actualTAT = getWorkingMinutes(start, resolution);
-      actualTATOrig = getOrignalMinutes(start, resolution)
-      tranfActualTAT = 0;
+    actualTAT = getWorkingMinutes(start, resolution);
+    actualTATOrig = getOrignalMinutes(start, resolution)
+    tranfActualTAT = 0;
   }
 
   const benchmarkPercentage = ((actualTAT - ticketResTimeInMinutes) / ticketResTimeInMinutes) * 100;
 
   let benchmarkCategory;
   if (benchmarkPercentage < 1) {
-      benchmarkCategory = "<0 %";
+    benchmarkCategory = "<0 %";
   } else if (benchmarkPercentage <= 20) {
-      benchmarkCategory = "1% to 20%";
+    benchmarkCategory = "1% to 20%";
   } else if (benchmarkPercentage <= 50) {
-      benchmarkCategory = "21% to 50%";
+    benchmarkCategory = "21% to 50%";
   } else if (benchmarkPercentage <= 80) {
-      benchmarkCategory = "51% to 80%";
+    benchmarkCategory = "51% to 80%";
   } else {
-      benchmarkCategory = "81% to above";
+    benchmarkCategory = "81% to above";
   }
 
   return {
-      actualTAT,
-      actualTATOrig,
-      benchmarkPercentage,
-      benchmarkCategory,
-      tranfActualTAT,
-      OrigtranfActualTAT 
+    actualTAT,
+    actualTATOrig,
+    benchmarkPercentage,
+    benchmarkCategory,
+    tranfActualTAT,
+    OrigtranfActualTAT
   };
 };
 

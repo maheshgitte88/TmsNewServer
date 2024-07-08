@@ -118,4 +118,23 @@ router.get('/all-hierarchy', async (req, res) => {
     }
   });
 
+
+  router.get('/fetch-query-data', async (req, res) => {
+    try {
+      const queryCategories = await QueryCategory.findAll({
+        include: {
+          model: QuerySubcategory,
+          required: true
+        }
+      });
+      res.status(200).json({ success: true, data: queryCategories });
+    } catch (error) {
+      console.error('Error fetching query data:', error);
+      res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+  });
+
+  
+  
+
 module.exports = router;
